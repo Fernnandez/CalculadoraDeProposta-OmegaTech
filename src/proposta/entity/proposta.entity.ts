@@ -1,5 +1,7 @@
 import { Guid } from 'guid-typescript';
-import { Entity, Column, PrimaryColumn, CreateDateColumn } from 'typeorm';
+import { Carga } from 'src/carga/entity/carga.entity';
+import { Usuario } from 'src/usuario/entities/usuario.entity';
+import { Entity, Column, PrimaryColumn, CreateDateColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 // import { Entity as BaseEntity } from 'src/shared/base.entity';
 
 @Entity({ name: 'proposta' })
@@ -33,6 +35,19 @@ export class Proposta {
 
     @Column()
     private user: string;
+
+    @ManyToOne(() => Usuario, usuario => usuario.propostas)
+    usuario: Usuario;
+
+    @CreateDateColumn()
+    created_at: Date;
+
+    @CreateDateColumn()
+    updated_at: Date;
+
+    @ManyToMany(() => Carga, carga => carga.proposta)
+    @JoinTable()
+    carga: Carga[];
 
     constructor(
         data_inicio: Date,

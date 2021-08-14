@@ -1,5 +1,6 @@
 import { Guid } from 'guid-typescript';
-import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn } from 'typeorm';
+import { Proposta } from 'src/proposta/entity/proposta.entity';
+import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn, CreateDateColumn, OneToMany } from 'typeorm';
 
 @Entity('usuarios')
 export class Usuario {
@@ -17,6 +18,12 @@ export class Usuario {
 
     @Column()
     password: string;
+
+    @CreateDateColumn()
+    created_at: Date;
+
+    @OneToMany(() => Proposta, proposta => proposta.usuario)
+    propostas: Proposta[];
 
     constructor(name: string, email: string, password: string) {
         this.id = Guid.create().toString();
