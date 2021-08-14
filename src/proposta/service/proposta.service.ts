@@ -30,14 +30,14 @@ export class PropostaService {
         return this.propostaRepository.find();
     }
 
-    findOne(id: number) {
-        const proposta = this.propostaRepository.findOne(id);
+    findOne(id: Guid) {
+        const proposta = this.propostaRepository.findOne(id.toString());
         return proposta;
     }
 
-    async update(id: string, updatePropostaDto: UpdatePropostaDto) {
+    async update(id: Guid, updatePropostaDto: UpdatePropostaDto) {
         const proposta = await this.propostaRepository.preload({
-            id: id,
+            id: id.toString(),
             ...updatePropostaDto,
         });
 
@@ -47,8 +47,8 @@ export class PropostaService {
         return this.propostaRepository.save(proposta);
     }
 
-    async remove(id: number) {
-        const proposta = await this.propostaRepository.findOne(id);
+    async remove(id: Guid) {
+        const proposta = await this.propostaRepository.findOne(id.toString());
 
         if (!proposta) {
             throw new NotFoundException(`proposta ID ${id} not found`);

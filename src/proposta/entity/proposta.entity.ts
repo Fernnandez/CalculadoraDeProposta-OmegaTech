@@ -1,9 +1,18 @@
 import { Guid } from 'guid-typescript';
-import { Entity, Column } from 'typeorm';
-import { Entity as BaseEntity } from 'src/shared/base.entity';
+import { Entity, Column, PrimaryColumn, CreateDateColumn } from 'typeorm';
+// import { Entity as BaseEntity } from 'src/shared/base.entity';
 
 @Entity({ name: 'proposta' })
-export class Proposta extends BaseEntity {
+export class Proposta {
+    @PrimaryColumn({ type: 'uuid', name: 'ID' })
+    public id: string;
+
+    @CreateDateColumn({
+        type: 'timestamptz',
+        default: () => 'CURRENT_TIMESTAMP',
+    })
+    createdAt: Date;
+
     @Column({ type: 'timestamptz' })
     private data_inicio: Date;
 
@@ -22,6 +31,24 @@ export class Proposta extends BaseEntity {
     @Column({ type: 'numeric' })
     private valor_proposta: number;
 
-    // @Column({ type: 'varchar' })
-    // private user: string;
+    @Column()
+    private user: string;
+
+    constructor(
+        data_inicio: Date,
+        data_fim: Date,
+        fonte_energia: string,
+        sub_mercado: string,
+        valor_proposta: number,
+        user: string,
+    ) {
+        this.id = Guid.create().toString();
+        this.createdAt = new Date();
+        this.data_inicio = data_inicio;
+        this.data_fim = data_fim;
+        this.fonte_energia = fonte_energia;
+        this.sub_mercado = sub_mercado;
+        this.valor_proposta = valor_proposta;
+        this.user = user;
+    }
 }

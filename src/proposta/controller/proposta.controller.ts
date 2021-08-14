@@ -30,25 +30,20 @@ export class PropostaController {
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.service.findOne(+id);
+    findOne(@Param('id') id: Guid) {
+        return this.service.findOne(id);
     }
 
     @Patch(':id')
     update(
-        @Param('id') id: string,
+        @Param('id') id: Guid,
         @Body() updatePropostaDto: UpdatePropostaDto,
     ) {
         return this.service.update(id, updatePropostaDto);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.service.remove(+id);
+    remove(@Param('id') id: Guid) {
+        return this.service.remove(id);
     }
-
-    // @Post()
-    // calculate() {
-    //     //TODO
-    // }
 }

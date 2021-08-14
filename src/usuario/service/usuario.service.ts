@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Guid } from 'guid-typescript';
 import { Repository } from 'typeorm';
 import { CreateUsuarioDto } from '../dto/create-usuario.dto';
 import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
@@ -23,14 +24,14 @@ export class UsuarioService {
         return this.usuarioRepository.find();
     }
 
-    findOne(id: number) {
-        const usuario = this.usuarioRepository.findOne(id);
+    findOne(id: Guid) {
+        const usuario = this.usuarioRepository.findOne(id.toString());
         return usuario;
     }
 
-    async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
+    async update(id: Guid, updateUsuarioDto: UpdateUsuarioDto) {
         const usuario = await this.usuarioRepository.preload({
-            id: id,
+            id: id.toString(),
             ...updateUsuarioDto,
         });
 
@@ -40,8 +41,8 @@ export class UsuarioService {
         return this.usuarioRepository.save(usuario);
     }
 
-    async remove(id: number) {
-        const usuario = await this.usuarioRepository.findOne(id);
+    async remove(id: Guid) {
+        const usuario = await this.usuarioRepository.findOne(id.toString());
 
         if (!usuario) {
             throw new NotFoundException(`Usuario ID ${id} not found`);
