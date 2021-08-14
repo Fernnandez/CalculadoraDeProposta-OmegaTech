@@ -39,10 +39,10 @@ export class Proposta {
     @ManyToOne(() => Usuario, usuario => usuario.propostas)
     usuario: Usuario;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'timestamptz'})
     created_at: Date;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'timestamptz'})
     updated_at: Date;
 
     @ManyToMany(() => Carga, carga => carga.proposta)

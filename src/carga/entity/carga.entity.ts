@@ -1,4 +1,4 @@
-import { Guid } from 'guid-typescript'
+//import { Guid } from 'guid-typescript'
 import { Column, CreateDateColumn, Entity, ManyToMany } from "typeorm";
 import { Entity as BaseEntity } from "src/shared/base.entity";
 import { Proposta } from 'src/proposta/entity/proposta.entity';
@@ -15,10 +15,10 @@ export class Carga extends BaseEntity {
   @Column({ type: 'varchar' })
   private proposta_id: string
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz'})
   created_at: Date;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz'})
   updated_at: Date;
 
   @ManyToMany(() => Proposta, proposta => proposta.carga)
