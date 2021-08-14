@@ -1,23 +1,18 @@
 import { Guid } from 'guid-typescript';
-import {
-    PrimaryGeneratedColumn,
-    Column,
-    UpdateDateColumn,
-    CreateDateColumn,
-} from 'typeorm';
+import { PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
-export abstract class Entity {
+export abstract class BasicEntity {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    public id: string;
 
     @Column({ type: 'varchar' })
-    id_public: string;
+    public id_public: string;
 
     @CreateDateColumn({
         type: 'timestamptz',
         default: () => 'CURRENT_TIMESTAMP',
     })
-    createdAt: Date;
+    private createdAt: Date;
 
     constructor() {
         this.id_public = Guid.create().toString();

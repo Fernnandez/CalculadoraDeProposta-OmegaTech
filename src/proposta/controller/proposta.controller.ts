@@ -9,7 +9,7 @@ import {
 import { Param } from '@nestjs/common';
 import { Controller, Get, Post } from '@nestjs/common';
 import { Guid } from 'guid-typescript';
-import { IController } from 'src/shared/controller.interface';
+
 import { CreatePropostaDto } from '../dtos/create-proposta.dto';
 import { UpdatePropostaDto } from '../dtos/update-proposta.dto';
 import { Proposta } from '../entity/proposta.entity';

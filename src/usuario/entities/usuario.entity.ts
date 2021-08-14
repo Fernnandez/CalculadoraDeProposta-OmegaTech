@@ -1,33 +1,23 @@
-import { Guid } from 'guid-typescript';
 import { Proposta } from 'src/proposta/entity/proposta.entity';
-import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn, CreateDateColumn, OneToMany } from 'typeorm';
+import { BasicEntity } from 'src/shared/basic-entity';
+import { Entity, Column, OneToMany } from 'typeorm';
 
 @Entity('usuarios')
-export class Usuario {
-    @PrimaryColumn({ type: 'uuid', name: 'ID' })
-    public id: string;
-
-    @Column({ type: 'date', name: 'DT_CREATED' })
-    public createdAt: Date;
+export class Usuario extends BasicEntity {
+    @Column()
+    private name: string;
 
     @Column()
-    name: string;
+    private email: string;
 
     @Column()
-    email: string;
+    private password: string;
 
-    @Column()
-    password: string;
-
-    @CreateDateColumn({ type: 'timestamptz'})
-    created_at: Date;
-
-    @OneToMany(() => Proposta, proposta => proposta.usuario)
+    @OneToMany(() => Proposta, (proposta) => proposta.usuario)
     propostas: Proposta[];
 
     constructor(name: string, email: string, password: string) {
-        this.id = Guid.create().toString();
-        this.createdAt = new Date();
+        super();
         this.name = name;
         this.email = email;
         this.password = password;
