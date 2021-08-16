@@ -19,7 +19,7 @@ export class Proposta {
     @Generated('increment')
     id: number;
 
-    @PrimaryColumn({ type: 'varchar' })
+    @PrimaryColumn("uuid")
     public id_public: string;
 
     @Column({ type: 'date' })

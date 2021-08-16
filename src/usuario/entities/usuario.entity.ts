@@ -1,10 +1,14 @@
 import { Proposta } from 'src/proposta/entity/proposta.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, Generated } from 'typeorm';
 
 @Entity('usuarios')
 export class Usuario {
-    @PrimaryGeneratedColumn()
+    @Column({ type: 'int' })
+    @Generated('increment')
     id: number;
+
+    @PrimaryGeneratedColumn("uuid")
+    id_public: string;
 
     @Column()
     name: string;

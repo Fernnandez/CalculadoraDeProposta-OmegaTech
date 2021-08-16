@@ -4,7 +4,7 @@
     "port": 5432,
     "username": "postgres",
     "password": "mzhide",
-    "database": "omega",
+    "database": "OmegaDB",
     "entities": ["dist/**/*.entity{.ts,.js}"],
     "migrations": ["database/migrations//*.ts"],
     "synchronize": true,
