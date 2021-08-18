@@ -1,23 +1,30 @@
-import { Guid } from 'guid-typescript'
-import { Column, Entity } from "typeorm";
-import { Entity as BaseEntity } from "src/shared/base.entity";
+import { Column, Entity, JoinColumn, ManyToMany } from 'typeorm';
+import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
 
-@Entity({ name: 'carga' })
-export class Carga extends BaseEntity {
-  
-  @Column({ type: 'varchar' })
-  private company_name: string
+import { Proposta } from 'src/proposta/entity/proposta.entity';
+import { BasicEntity } from 'src/shared/basic-entity';
 
-  @Column({ type: 'numeric' })
-  private kw_consume: number
+@Entity({ name: 'cargas' })
+export class Carga extends BasicEntity {
+    @Column({ type: 'varchar', name: 'nome_empresa' })
+    @IsNotEmpty({ message: 'Nome é obrigatório' })
+    @IsString()
+    public nome_empresa: string;
 
-  @Column({ type: 'varchar' })
-  private proposta_id: string
+    @Column({ type: 'numeric', name: 'consumo_kwh' })
+    @IsNotEmpty({ message: 'Consumo é obrigatório' })
+    @IsNumber()
+    public consumo_kwh: number;
 
-  constructor(company_name: string, kw_consume: number, proposta_id: string) {
-    super()
-    this.company_name = company_name
-    this.kw_consume = kw_consume
-    this.proposta_id = proposta_id
-  }
+    @ManyToMany(() => Proposta, (proposta) => proposta.cargas, {
+        onDelete: 'CASCADE',
+    })
+    @JoinColumn({ name: 'proposta_id' })
+    public proposta: Proposta;
+
+    constructor(nome_empresa: string, consumo_kwh: number) {
+        super();
+        this.nome_empresa = nome_empresa;
+        this.consumo_kwh = consumo_kwh;
+    }
 }

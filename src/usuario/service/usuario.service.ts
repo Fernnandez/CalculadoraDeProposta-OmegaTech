@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Guid } from 'guid-typescript';
 import { CreateUsuarioDto } from '../dto/create-usuario.dto';
 import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
-import { Usuario } from '../entities/usuario.entity';
+import { Usuario } from '../entity/usuario.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuarioService {
@@ -14,7 +16,11 @@ export class UsuarioService {
 
     create(createUsuarioDto: CreateUsuarioDto) {
         // crio o objeto com base no dto
-        const usuario = this.usuarioRepository.create(createUsuarioDto);
+        let usuario = new Usuario();
+        usuario.email = createUsuarioDto.email;
+        usuario.nome = createUsuarioDto.name;
+        //criptografando a senha
+        usuario.password = bcrypt.hashSync(createUsuarioDto.password, 8);
         // salvo o objeto criado
         return this.usuarioRepository.save(usuario);
     }
@@ -23,14 +29,13 @@ export class UsuarioService {
         return this.usuarioRepository.find();
     }
 
-    findOne(id: number) {
-        const usuario = this.usuarioRepository.findOne(id);
-        return usuario;
+    async findOne(email: string): Promise<Usuario> {
+        return this.usuarioRepository.findOne({ email: email });
     }
 
-    async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
+    async update(id: Guid, updateUsuarioDto: UpdateUsuarioDto) {
         const usuario = await this.usuarioRepository.preload({
-            id: id,
+            id_public: id.toString(),
             ...updateUsuarioDto,
         });
 
@@ -40,8 +45,8 @@ export class UsuarioService {
         return this.usuarioRepository.save(usuario);
     }
 
-    async remove(id: number) {
-        const usuario = await this.usuarioRepository.findOne(id);
+    async remove(id: Guid) {
+        const usuario = await this.usuarioRepository.findOne(id.toString());
 
         if (!usuario) {
             throw new NotFoundException(`Usuario ID ${id} not found`);

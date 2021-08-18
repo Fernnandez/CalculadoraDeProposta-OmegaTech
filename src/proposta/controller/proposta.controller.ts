@@ -1,51 +1,46 @@
-import {
-    BadRequestException,
-    Body,
-    Delete,
-    HttpCode,
-    Patch,
-    Put,
-} from '@nestjs/common';
+import { Body, Delete, UseGuards } from '@nestjs/common';
 import { Param } from '@nestjs/common';
 import { Controller, Get, Post } from '@nestjs/common';
 import { Guid } from 'guid-typescript';
-import { IController } from 'src/shared/controller.interface';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreatePropostaDto } from '../dtos/create-proposta.dto';
-import { UpdatePropostaDto } from '../dtos/update-proposta.dto';
-import { Proposta } from '../entity/proposta.entity';
 import { PropostaService } from '../service/proposta.service';
 
 @Controller('proposta')
 export class PropostaController {
     constructor(private readonly service: PropostaService) {}
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     create(@Body() createPropostaDto: CreatePropostaDto) {
         return this.service.create(createPropostaDto);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get()
     findAll() {
         return this.service.findAll();
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.service.findOne(+id);
+    findOne(@Param('id') id: Guid) {
+        return this.service.findOne(id);
     }
 
-    @Patch(':id')
-    update(
-        @Param('id') id: string,
-        @Body() updatePropostaDto: UpdatePropostaDto,
-    ) {
-        return this.service.update(id, updatePropostaDto);
-    }
-
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.service.remove(+id);
+    remove(@Param('id') id: Guid) {
+        return this.service.remove(id);
     }
+
+    // @Patch(':id')
+    // update(
+    //     @Param('id') id: string,
+    //     @Body() updatePropostaDto: UpdatePropostaDto,
+    // ) {
+    //     return this.service.update(id, updatePropostaDto);
+    // }
 
     // @Post()
     // calculate() {

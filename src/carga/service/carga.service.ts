@@ -1,28 +1,70 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
-import { Guid } from "guid-typescript";
-import { UpdateCargaDto } from "../dtos/update-carga.dto";
-import { Carga } from "../entity/carga.entity";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateCargaDto } from '../dtos/create-carga.dto';
+import { Carga } from '../entity/carga.entity';
 
 @Injectable()
 export class CargaService {
+    constructor(
+        @InjectRepository(Carga)
+        private readonly cargaRepository: Repository<Carga>,
+    ) {}
 
-  add(entity: Carga): void {
-    //
-  }
+    async findCargas(cargas: Carga[]) {
+        const carga: Carga[] = [];
 
-  findAll(): Carga[] {
-    return
-  }
+        for (let i = 0; i < cargas.length; i++) {
+            const c = await this.cargaRepository.find({
+                nome_empresa: `${cargas[i].nome_empresa}`,
+            });
 
-  findOne(id: Guid): Carga {
-    return
-  }
+            if (c.length <= 0) {
+                throw new NotFoundException(
+                    `Carga inexistente favor informar uma carga válida`,
+                );
+            }
+            carga.push(c[0]);
+        }
+        return carga;
+    }
 
-  update(id: Guid, dto: UpdateCargaDto): void {
-    //
-  }
+    async create(carga: CreateCargaDto) {
+        const newCarga = new Carga(carga.nome_empresa, carga.consumo_kwh);
 
-  remove(id: Guid) {
-    //
-  }
+        await this.cargaRepository.save(newCarga);
+        newCarga;
+    }
+    consumoTotal(cargas: Carga[]) {
+        const consumoTotal = cargas
+            .map((cargas) => cargas.consumo_kwh)
+            .reduce((p, c) => {
+                return +p + +c;
+            });
+        return consumoTotal;
+    }
+    async findAll(): Promise<Carga[]> {
+        return await this.cargaRepository.find();
+    }
+    findOne() {}
+    // async update(carga: Carga[]) {
+    //     const cargas = carga.map((c) => {
+    //         this.cargaRepository.update(c.id_public, c);
+    //     });
+    //     return cargas;
+    // }
+
+    // async remove(idProposta: Guid, idCarga: Guid) {
+    //     const carga = await this.cargaRepository.findOne(idCarga.toString());
+
+    //     if (!carga) {
+    //         throw new NotFoundException(`carga ID ${idCarga} not found`);
+    //     }
+    //     await this.cargaRepository.remove(carga);
+
+    //     const cargas = await this.cargaRepository.find({
+    //         where: { proposta: idProposta },
+    //     });
+    //     return cargas;
+    // }
 }
