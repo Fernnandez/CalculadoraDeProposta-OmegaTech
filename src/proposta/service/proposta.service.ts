@@ -1,7 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Request } from 'express';
 import { Guid } from 'guid-typescript';
 import { CargaService } from 'src/carga/service/carga.service';
+import { Usuario } from 'src/usuario/entity/usuario.entity';
+import { UsuarioService } from 'src/usuario/service/usuario.service';
 import { Repository } from 'typeorm';
 
 import { CreatePropostaDto } from '../dtos/create-proposta.dto';
@@ -12,11 +15,13 @@ import { Proposta } from '../entity/proposta.entity';
 export class PropostaService {
     constructor(
         private readonly cargaService: CargaService,
+        private readonly usuarioService: UsuarioService,
         @InjectRepository(Proposta)
         private readonly propostaRepository: Repository<Proposta>,
     ) {}
 
-    async create(dto: CreatePropostaDto) {
+    async create(dto: CreatePropostaDto, user: Usuario) {
+        const usuario = await this.usuarioService.findOne(user.id_public);
         const consumoTotal = this.cargaService.consumoTotal(dto.cargas);
         const periodo = this.calcularPeriodo(dto.data_inicio, dto.data_fim);
         const valorTotal = this.calcularProposta(
@@ -32,6 +37,7 @@ export class PropostaService {
             dto.fonte_energia,
             dto.sub_mercado,
             valorTotal,
+            usuario,
             cargas,
         );
         // salvo o objeto criado
@@ -56,40 +62,40 @@ export class PropostaService {
         return this.propostaRepository.remove(proposta);
     }
     calcularProposta(
-        submercado: string,
         font: string,
+        submercado: string,
         consumo_total: number,
         // periodo: number,
     ) {
-        const valor_kw = 10;
-        let valor_submercado: number;
-        let valor_fonte: number;
-        let total_value: number;
-
+        let fonte_value: number;
+        let submercado_value: number;
+        let valor_total: number;
+        console.log(submercado);
+        console.log(font);
         switch (submercado) {
-            case 'Norte': {
-                valor_submercado = 2;
+            case 'NORTE': {
+                submercado_value = 2;
                 break;
             }
-            case 'Nordeste': {
-                valor_submercado = -1;
+            case 'NORDESTE': {
+                submercado_value = -1;
                 break;
             }
-            case 'Sul': {
-                valor_submercado = 3.5;
+            case 'SUL': {
+                submercado_value = 3.5;
                 break;
             }
-            case 'Sudeste': {
-                valor_submercado = 1.5;
+            case 'SUDESTE': {
+                submercado_value = 1.5;
                 break;
             }
         }
 
-        valor_fonte = font == 'Convencional' ? 5 : -2;
-        total_value =
-            consumo_total * valor_kw + (valor_submercado + valor_fonte);
+        fonte_value = font == 'CONVENCIONAL' ? 5 : -2;
 
-        return total_value;
+        valor_total = consumo_total * 10 + (submercado_value + fonte_value);
+
+        return valor_total;
     }
     calcularPeriodo(data_inicio: Date, data_fim: Date) {}
 

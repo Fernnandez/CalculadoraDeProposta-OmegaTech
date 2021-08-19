@@ -37,4 +37,18 @@ export class CreatePropostaDto {
         type: () => Object,
     })
     public cargas: Carga[];
+
+    constructor(
+        data_inicio: Date,
+        data_fim: Date,
+        sub_mercado: string,
+        fonte_energia: string,
+        cargas: Carga[],
+    ) {
+        this.data_inicio = data_inicio;
+        this.data_fim = data_fim;
+        this.sub_mercado = sub_mercado;
+        this.fonte_energia = fonte_energia;
+        this.cargas = cargas;
+    }
 }

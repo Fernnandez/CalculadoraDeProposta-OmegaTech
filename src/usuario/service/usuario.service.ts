@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+    ConflictException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Guid } from 'guid-typescript';
@@ -14,22 +18,36 @@ export class UsuarioService {
         private readonly usuarioRepository: Repository<Usuario>,
     ) {}
 
-    create(createUsuarioDto: CreateUsuarioDto) {
-        // crio o objeto com base no dto
-        let usuario = new Usuario();
-        usuario.email = createUsuarioDto.email;
-        usuario.nome = createUsuarioDto.name;
+    async create(createUsuarioDto: CreateUsuarioDto) {
+        const { nome, email, password } = createUsuarioDto;
+
         //criptografando a senha
-        usuario.password = bcrypt.hashSync(createUsuarioDto.password, 8);
+        const passwordHash = bcrypt.hashSync(password, 8);
+        // crio o objeto com base no dto
+        const usuario = new Usuario(nome, email, passwordHash);
+
+        // Verificando a existência desse email
+        const usuarioDuplicado = await this.usuarioRepository.findOne({
+            email: usuario.email,
+        });
+        if (usuarioDuplicado) {
+            throw new ConflictException(
+                `Usuário com email ${usuario.email} já existe.`,
+            );
+        }
         // salvo o objeto criado
-        return this.usuarioRepository.save(usuario);
+        await this.usuarioRepository.save(usuario);
     }
 
     findAll() {
         return this.usuarioRepository.find();
     }
 
-    async findOne(email: string): Promise<Usuario> {
+    async findOne(id_public: string): Promise<Usuario> {
+        return await this.usuarioRepository.findOne(id_public);
+    }
+
+    async findByEmail(email: string): Promise<Usuario> {
         return this.usuarioRepository.findOne({ email: email });
     }
 

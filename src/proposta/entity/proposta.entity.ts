@@ -5,6 +5,7 @@ import {
     JoinTable,
     ManyToOne,
     ManyToMany,
+    JoinColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import {
@@ -18,6 +19,7 @@ import {
 
 import { BasicEntity } from 'src/shared/basic-entity';
 import { Carga } from 'src/carga/entity/carga.entity';
+import { Usuario } from 'src/usuario/entity/usuario.entity';
 
 @Entity({ name: 'propostas' })
 export class Proposta extends BasicEntity {
@@ -50,8 +52,9 @@ export class Proposta extends BasicEntity {
     @IsNumber()
     public valor_proposta: number;
 
-    // @ManyToOne(() => Usuario, (usuario) => usuario.propostas)
-    // usuario: Usuario;
+    @ManyToOne(() => Usuario, (usuario) => usuario.propostas)
+    @JoinColumn({ name: 'usuario_id' })
+    usuario: Usuario;
 
     @ManyToMany((type) => Carga, (carga) => carga.proposta, {
         eager: true,
@@ -68,6 +71,7 @@ export class Proposta extends BasicEntity {
         fonte_energia: string,
         sub_mercado: string,
         valor_proposta: number,
+        usuario: Usuario,
         cargas: Carga[],
     ) {
         super();
@@ -76,6 +80,7 @@ export class Proposta extends BasicEntity {
         this.fonte_energia = fonte_energia;
         this.sub_mercado = sub_mercado;
         this.valor_proposta = valor_proposta;
+        this.usuario = usuario;
         this.cargas = cargas;
     }
 }

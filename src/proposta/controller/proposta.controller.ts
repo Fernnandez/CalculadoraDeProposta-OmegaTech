@@ -1,4 +1,4 @@
-import { Body, Delete, UseGuards } from '@nestjs/common';
+import { Body, Delete, Request, UseGuards } from '@nestjs/common';
 import { Param } from '@nestjs/common';
 import { Controller, Get, Post } from '@nestjs/common';
 import { Guid } from 'guid-typescript';
@@ -12,8 +12,8 @@ export class PropostaController {
 
     @UseGuards(JwtAuthGuard)
     @Post()
-    create(@Body() createPropostaDto: CreatePropostaDto) {
-        return this.service.create(createPropostaDto);
+    create(@Body() createPropostaDto: CreatePropostaDto, @Request() req) {
+        return this.service.create(createPropostaDto, req.user);
     }
 
     @UseGuards(JwtAuthGuard)

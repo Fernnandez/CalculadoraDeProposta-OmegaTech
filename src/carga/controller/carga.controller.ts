@@ -9,7 +9,7 @@ export class CargaController {
     findAll() {
         return this.service.findAll();
     }
-    @Post('carga')
+    @Post()
     createCarga(@Body() createCargaDto: CreateCargaDto) {
         return this.service.create(createCargaDto);
     }

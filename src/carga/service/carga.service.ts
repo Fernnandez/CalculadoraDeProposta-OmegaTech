@@ -33,7 +33,7 @@ export class CargaService {
         const newCarga = new Carga(carga.nome_empresa, carga.consumo_kwh);
 
         await this.cargaRepository.save(newCarga);
-        newCarga;
+        return newCarga;
     }
     consumoTotal(cargas: Carga[]) {
         const consumoTotal = cargas

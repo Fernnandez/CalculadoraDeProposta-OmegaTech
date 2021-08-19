@@ -9,6 +9,7 @@ import {
     CreateDateColumn,
     Generated,
     PrimaryColumn,
+    JoinTable,
 } from 'typeorm';
 
 @Entity('usuarios')
@@ -35,6 +36,17 @@ export class Usuario extends BasicEntity {
     @IsNotEmpty({ message: 'A senha do usuário é obrigatória' })
     public password: string;
 
-    // @OneToMany(() => Proposta, (proposta) => proposta.usuario)
-    // public propostas: Proposta[];
+    @OneToMany(() => Proposta, (proposta) => proposta.usuario, {
+        eager: true,
+        onDelete: 'CASCADE',
+    })
+    @JoinTable({})
+    public propostas: Proposta[];
+
+    constructor(nome: string, email: string, password: string) {
+        super();
+        this.nome = nome;
+        this.email = email;
+        this.password = password;
+    }
 }
