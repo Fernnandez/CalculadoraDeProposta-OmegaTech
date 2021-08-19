@@ -82,7 +82,6 @@ export class UsuarioController {
     @ApiOkResponse()
     @ApiUnauthorizedResponse({ description: 'Usuario ou Senha incorretor' })
     async login(@Request() req) {
-        console.log(req.user);
         return this.authService.login(req.user);
     }
 }

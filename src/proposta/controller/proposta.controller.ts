@@ -1,4 +1,4 @@
-import { Body, Delete, Request, UseGuards } from '@nestjs/common';
+import { Body, Delete, Patch, Request, UseGuards } from '@nestjs/common';
 import { Param } from '@nestjs/common';
 import { Controller, Get, Post } from '@nestjs/common';
 import { Guid } from 'guid-typescript';
@@ -18,8 +18,8 @@ export class PropostaController {
 
     @UseGuards(JwtAuthGuard)
     @Get()
-    findAll() {
-        return this.service.findAll();
+    findAll(@Request() req) {
+        return this.service.findAll(req.user);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -34,16 +34,8 @@ export class PropostaController {
         return this.service.remove(id);
     }
 
-    // @Patch(':id')
-    // update(
-    //     @Param('id') id: string,
-    //     @Body() updatePropostaDto: UpdatePropostaDto,
-    // ) {
-    //     return this.service.update(id, updatePropostaDto);
-    // }
-
-    // @Post()
-    // calculate() {
-    //     //TODO
-    // }
+    @Patch(':id')
+    contratarProposta(@Param('id') id: Guid) {
+        return this.service.contratar(id);
+    }
 }

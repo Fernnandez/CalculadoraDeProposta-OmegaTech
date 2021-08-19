@@ -1,6 +1,6 @@
 import { Carga } from 'src/carga/entity/carga.entity';
 
-export class UpdatePropostaDto {
+export class ContratarPropostaDto {
     public data_inicio: Date;
     public data_fim: Date;
     public fonte_energia: string;

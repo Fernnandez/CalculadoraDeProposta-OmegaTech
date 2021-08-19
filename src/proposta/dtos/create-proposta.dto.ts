@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { IsDateString, IsNotEmpty } from 'class-validator';
 import { Carga } from 'src/carga/entity/carga.entity';
 
 export class CreatePropostaDto {
     @IsNotEmpty({ message: 'Data inicial é obrigatória' })
+    // @IsDateString()
     @ApiProperty({
         example: '16/07/2021',
         description: 'Data de criação da proposta',
@@ -11,6 +12,8 @@ export class CreatePropostaDto {
     })
     public data_inicio: Date;
 
+    @IsNotEmpty({ message: 'Data Final é obrigatória' })
+    // @IsDateString()
     @ApiProperty({
         example: '22/04/2025',
         description: 'Data do fim da proposta',
@@ -18,6 +21,7 @@ export class CreatePropostaDto {
     })
     public data_fim: Date;
 
+    @IsNotEmpty({ message: 'Submercado é obrigatória' })
     @ApiProperty({
         example: 'NORDESTE',
         description: 'Divisões de submercados de energia',
@@ -25,6 +29,7 @@ export class CreatePropostaDto {
     })
     public sub_mercado: string;
 
+    @IsNotEmpty({ message: 'tipo de energiar é obrigatória' })
     @ApiProperty({
         example: 'RENOVÁVEL',
         description: 'Tipos de fontes de energia',
@@ -32,6 +37,7 @@ export class CreatePropostaDto {
     })
     public fonte_energia: string;
 
+    @IsNotEmpty({ message: 'cargas são obrigatória' })
     @ApiProperty({
         description: 'Cargas vinculadas à proposta',
         type: () => Object,

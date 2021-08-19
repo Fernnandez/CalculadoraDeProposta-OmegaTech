@@ -65,6 +65,10 @@ export class Proposta extends BasicEntity {
     @IsArray()
     cargas: Carga[];
 
+    contratarProposta() {
+        this.contratado = true;
+    }
+
     constructor(
         data_inicio: Date,
         data_fim: Date,

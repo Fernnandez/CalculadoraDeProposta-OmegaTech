@@ -35,6 +35,7 @@ export class CargaService {
         await this.cargaRepository.save(newCarga);
         return newCarga;
     }
+
     consumoTotal(cargas: Carga[]) {
         const consumoTotal = cargas
             .map((cargas) => cargas.consumo_kwh)
@@ -43,28 +44,8 @@ export class CargaService {
             });
         return consumoTotal;
     }
+
     async findAll(): Promise<Carga[]> {
         return await this.cargaRepository.find();
     }
-    findOne() {}
-    // async update(carga: Carga[]) {
-    //     const cargas = carga.map((c) => {
-    //         this.cargaRepository.update(c.id_public, c);
-    //     });
-    //     return cargas;
-    // }
-
-    // async remove(idProposta: Guid, idCarga: Guid) {
-    //     const carga = await this.cargaRepository.findOne(idCarga.toString());
-
-    //     if (!carga) {
-    //         throw new NotFoundException(`carga ID ${idCarga} not found`);
-    //     }
-    //     await this.cargaRepository.remove(carga);
-
-    //     const cargas = await this.cargaRepository.find({
-    //         where: { proposta: idProposta },
-    //     });
-    //     return cargas;
-    // }
 }
