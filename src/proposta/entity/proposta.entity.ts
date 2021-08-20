@@ -15,6 +15,7 @@ import {
     IsArray,
     IsBoolean,
     IsNumber,
+    isBoolean,
 } from 'class-validator';
 
 import { BasicEntity } from 'src/shared/basic-entity';
@@ -36,6 +37,10 @@ export class Proposta extends BasicEntity {
     @Column({ type: 'boolean', default: false })
     @IsBoolean()
     public contratado: boolean;
+
+    @Column({ type: 'boolean', default: false })
+    @IsBoolean()
+    public desconto: boolean;
 
     @Column({ type: 'varchar' })
     @IsNotEmpty({ message: 'Fonte de energia é obrigatório' })
@@ -69,6 +74,9 @@ export class Proposta extends BasicEntity {
         this.contratado = true;
     }
 
+    aplicarDesconto() {
+        this.contratado = true;
+    }
     constructor(
         data_inicio: Date,
         data_fim: Date,
@@ -77,6 +85,7 @@ export class Proposta extends BasicEntity {
         valor_proposta: number,
         usuario: Usuario,
         cargas: Carga[],
+        desconto: boolean,
     ) {
         super();
         this.data_inicio = data_inicio;
@@ -86,5 +95,6 @@ export class Proposta extends BasicEntity {
         this.valor_proposta = valor_proposta;
         this.usuario = usuario;
         this.cargas = cargas;
+        this.desconto = desconto;
     }
 }

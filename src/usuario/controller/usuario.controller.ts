@@ -54,7 +54,7 @@ export class UsuarioController {
         description: 'Nenhum usuário encontrado com este ID',
     })
     findOne(@Param('id') id: Guid) {
-        return this.usuarioService.findOne(id.toString()); ///bugzinho
+        return this.usuarioService.findOne(id.toString());
     }
 
     @UseGuards(JwtAuthGuard)

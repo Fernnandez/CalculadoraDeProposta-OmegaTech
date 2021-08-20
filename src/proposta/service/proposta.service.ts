@@ -33,26 +33,51 @@ export class PropostaService {
             dto.fonte_energia,
             dto.sub_mercado,
             consumoTotal,
-            periodo,
+            periodo.dias,
+            periodo.anos,
         );
         const cargas = await this.cargaService.findCargas(dto.cargas);
-        const proposta = new Proposta(
-            dto.data_inicio,
-            dto.data_fim,
-            dto.fonte_energia,
-            dto.sub_mercado,
-            valorTotal,
-            usuario,
-            cargas,
-        );
+        if (periodo.anos >= 3) {
+            const proposta = new Proposta(
+                dto.data_inicio,
+                dto.data_fim,
+                dto.fonte_energia,
+                dto.sub_mercado,
+                valorTotal,
+                usuario,
+                cargas,
+                true,
+            );
+            return this.propostaRepository.save(proposta);
+        } else {
+            const proposta = new Proposta(
+                dto.data_inicio,
+                dto.data_fim,
+                dto.fonte_energia,
+                dto.sub_mercado,
+                valorTotal,
+                usuario,
+                cargas,
+                false,
+            );
+            return this.propostaRepository.save(proposta);
+        }
+
         // salvo o objeto criado
-        return this.propostaRepository.save(proposta);
     }
 
     async findAll(user: Usuario) {
         const usuario = await this.usuarioService.findOne(user.id_public);
         const propostas = await this.propostaRepository.find({
             usuario: usuario,
+        });
+        const propostasDesc = propostas.sort((b, a) => {
+            if (a.id > b.id) {
+                return 1;
+            } else if (b.id > a.id) {
+                return -1;
+            }
+            return 0;
         });
         return propostas;
     }
@@ -85,6 +110,7 @@ export class PropostaService {
         }
         return this.propostaRepository.save(newProposta);
     }
+    async desconto(id: Guid) {}
 
     //serviços auxiliares
 
@@ -92,7 +118,8 @@ export class PropostaService {
         font: string,
         submercado: string,
         consumo_total: number,
-        periodo: number,
+        dias: number,
+        anos: number,
     ) {
         let fonte_value: number;
         let submercado_value: number;
@@ -121,10 +148,18 @@ export class PropostaService {
 
         fonte_value = font == 'CONVENCIONAL' ? 5 : -2;
 
-        valor_total =
-            consumo_diario *
-            periodo *
-            (valor_kw + submercado_value + fonte_value);
+        if (anos >= 3) {
+            valor_total =
+                (consumo_diario *
+                    dias *
+                    (valor_kw + submercado_value + fonte_value)) /
+                0.05;
+        } else {
+            valor_total =
+                consumo_diario *
+                dias *
+                (valor_kw + submercado_value + fonte_value);
+        }
 
         return parseFloat(valor_total.toFixed(2));
     }
@@ -147,7 +182,8 @@ export class PropostaService {
         const diff = moment(data_fim).diff(moment(data_inicio));
 
         const dias = moment.duration(diff).asDays();
+        const anos = moment.duration(diff).asYears();
 
-        return dias;
+        return { dias: dias, anos: anos };
     }
 }
