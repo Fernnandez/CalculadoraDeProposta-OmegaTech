@@ -1,10 +1,10 @@
 {
     "type": "postgres",
-    "host": "localhost",
-    "port": 15432,
-    "username": "postgres",
-    "password": "admin",
-    "database": "omega",
+    "host": "ec2-54-159-35-35.compute-1.amazonaws.com",
+    "port": 5432,
+    "username": "elsqgcaneughcn",
+    "password": "16f606e14959d2bbe2098908ee5849ee7849b06b6c6d531a7275b5684de5ada5",
+    "database": "dfv7ub7d0t88ia",
     "entities": ["dist/**/*.entity{.ts,.js}"],
     "synchronize": true
 }
