@@ -44,29 +44,30 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+## Routes
 
-## Test
+Usuário
+- GET `/usuario/` - Todos os usuários
+- GET `/usuario/{id}` - Um usuário específico
+- POST `/usuario/create` - Cadastra um usuário
+- POST `/usuario/login` - Login do usuário
+- PUT `/usuario/{id}` - Edita um usuário específico
+- DELETE `/usuario/{id}` - Remove um usuário específico
 
-```bash
-# unit tests
-$ npm run test
+Proposta
+- GET `/proposta` - Todas as propostas do usuário
+- GET `/proposta/{id}` - Uma proposta específica do usuário
+- POST `/proposta` - Cadastra uma proposta
+- PUT `/proposta/{id}` - Contrata uma proposta específica
+- DELETE `/proposta/{id}` - Remove uma proposta específica
 
-# e2e tests
-$ npm run test:e2e
+Carga
+- GET `/carga` - Todas as cargas
+- POST `/carga` - Cadastra uma carga
 
-# test coverage
-$ npm run test:cov
-```
+## Swagger API
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+> [Full API Spec](https://app-omega.herokuapp.com/api/#/)
 
 ## License
 
