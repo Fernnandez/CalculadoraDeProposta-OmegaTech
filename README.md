@@ -25,6 +25,14 @@
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# Projeto Final
+## Omega Energia | Gama Academy
+## Calculadora de Proposta
+## Equipe
+ - Aldy Souza
+ - Angelo Fernandes
+ - Eduardo Matheus Rodrigues
+ - Hugo Matheus Freire
 
 ## Installation
 
