@@ -28,6 +28,9 @@ export class PropostaService {
     async create(dto: CreatePropostaDto, user: Usuario) {
         const usuario = await this.usuarioService.findOne(user.id_public);
         const cargas = await this.cargaService.findCargas(dto.cargas);
+        if (cargas.length == 0) {
+            throw new BadRequestException('Selecione ao menos uma carga');
+        }
         const consumoTotal = await this.cargaService.consumoTotal(cargas);
         const periodo = await this.calcularPeriodo(
             dto.data_inicio,
