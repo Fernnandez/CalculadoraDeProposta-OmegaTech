@@ -27,16 +27,19 @@ export class PropostaService {
 
     async create(dto: CreatePropostaDto, user: Usuario) {
         const usuario = await this.usuarioService.findOne(user.id_public);
-        const consumoTotal = this.cargaService.consumoTotal(dto.cargas);
-        const periodo = this.calcularPeriodo(dto.data_inicio, dto.data_fim);
-        const valorTotal = this.calcularProposta(
+        const cargas = await this.cargaService.findCargas(dto.cargas);
+        const consumoTotal = await this.cargaService.consumoTotal(cargas);
+        const periodo = await this.calcularPeriodo(
+            dto.data_inicio,
+            dto.data_fim,
+        );
+        const valorTotal = await this.calcularProposta(
             dto.fonte_energia,
             dto.sub_mercado,
             consumoTotal,
             periodo.dias,
             periodo.anos,
         );
-        const cargas = await this.cargaService.findCargas(dto.cargas);
         if (periodo.anos >= 3) {
             const proposta = new Proposta(
                 dto.data_inicio,

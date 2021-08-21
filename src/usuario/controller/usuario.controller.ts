@@ -80,7 +80,7 @@ export class UsuarioController {
     @UseGuards(AuthGuard('local'))
     @Post('login')
     @ApiOkResponse()
-    @ApiUnauthorizedResponse({ description: 'Usuario ou Senha incorretor' })
+    @ApiUnauthorizedResponse({ description: 'Usuário ou Senha incorretor' })
     async login(@Request() req) {
         return this.authService.login(req.user);
     }

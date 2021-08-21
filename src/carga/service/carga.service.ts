@@ -16,7 +16,7 @@ export class CargaService {
 
         for (let i = 0; i < cargas.length; i++) {
             const c = await this.cargaRepository.find({
-                nome_empresa: `${cargas[i].nome_empresa}`,
+                id_public: `${cargas[i]}`,
             });
 
             if (c.length <= 0) {
@@ -42,10 +42,15 @@ export class CargaService {
             .reduce((p, c) => {
                 return +p + +c;
             });
+
         return consumoTotal;
     }
 
     async findAll(): Promise<Carga[]> {
-        return await this.cargaRepository.find();
+        const cargas = this.cargaRepository.find();
+        if (!cargas) {
+            throw new Error('nenhum carga no banco');
+        }
+        return cargas;
     }
 }

@@ -38,4 +38,14 @@ export class PropostaController {
     contratarProposta(@Param('id') id: Guid) {
         return this.service.contratar(id);
     }
+    @Post('/valor')
+    valorTotal(@Body() dto: any) {
+        return this.service.calcularProposta(
+            dto.fonte_energia,
+            dto.sub_mercado,
+            dto.consumo_total,
+            dto.dias,
+            dto.anos,
+        );
+    }
 }
