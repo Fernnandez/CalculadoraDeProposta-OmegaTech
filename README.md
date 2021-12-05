@@ -23,6 +23,7 @@
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 # Projeto Final
+Api com a proposta de fazer a criação de propostas para compra de energia com base em cargas (pontos de consumo) predefinidas cotando o consumo médio das cargas, o tempo de contratação e o tipo de energia desejado, aplicando regras de negocio do contexto da area de venda de energia 
 ## Omega Energia | Gama Academy
 ## Calculadora de Proposta
 ## Equipe
